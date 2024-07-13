@@ -2,7 +2,7 @@ import React from "react";
 import { Flex, Text, IconButton } from "@chakra-ui/react";
 import { FiArrowLeft, FiEdit } from "react-icons/fi";
 
-const ChatHeader = () => {
+const ChatHeader: React.FC = () => {
   return (
     <Flex
       direction="row"

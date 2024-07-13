@@ -9,30 +9,35 @@ import debounce from "lodash.debounce";
 
 const ChatScreen = () => {
   const { chats, loading, fetchMoreChats } = useChatFetching(0);
-  const chatContainerRef = useRef<HTMLDivElement | null>(null);
+  const chatContainerRef = useRef<HTMLDivElement | null>();
   const fetchThreshold = 200; 
 
   useEffect(() => {
     const handleScroll = debounce(() => {
-      if (chatContainerRef?.current?.scrollTop < fetchThreshold && !loading) {
-        fetchMoreChats();
+      if(chatContainerRef.current){
+        if (chatContainerRef.current.scrollTop < fetchThreshold && !loading) {
+          fetchMoreChats();
+        }
       }
+    
     }, 50);
 
     const chatContainer = chatContainerRef.current;
     chatContainer?.addEventListener("scroll", handleScroll);
 
     return () => {
-      chatContainer.removeEventListener("scroll", handleScroll);
+      if(chatContainer){
+        chatContainer.removeEventListener("scroll", handleScroll);
+      }
     };
   }, [fetchMoreChats, loading]);
 
   useEffect(() => {
     const chatContainer = chatContainerRef.current;
-    if (chatContainer.scrollTop < fetchThreshold && !loading) {
-      chatContainer.scrollTop = fetchThreshold; 
+    if (chatContainer && chatContainer.scrollTop < fetchThreshold && !loading) {
+      chatContainer.scrollTop = fetchThreshold;
     }
-  }, [chats]);
+  }, [chats, fetchThreshold, loading]);
 
   return (
     <Flex direction="column" height="100vh" justify="space-between">
@@ -44,7 +49,7 @@ const ChatScreen = () => {
         padding={4}
         overflowY="scroll"
         flex="1"
-        ref={chatContainerRef}
+        ref={chatContainerRef as React.RefObject<HTMLDivElement>}
       >
         <ChatMessages chats={chats} />
       </VStack>
