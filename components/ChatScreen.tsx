@@ -10,7 +10,7 @@ import debounce from "lodash.debounce";
 const ChatScreen = () => {
   const { chats, loading, fetchMoreChats } = useChatFetching(0);
   const chatContainerRef = useRef<HTMLDivElement | null>();
-  const fetchThreshold = 200; 
+  const fetchThreshold = 4000; 
 
   useEffect(() => {
     const handleScroll = debounce(() => {
