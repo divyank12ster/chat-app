@@ -1,4 +1,5 @@
-import { VStack, HStack, Image } from "@chakra-ui/react";
+import { VStack, HStack, Image, Box } from "@chakra-ui/react";
+
 export interface ChatMessage {
   id: string;
   message: string;
@@ -21,13 +22,24 @@ const ChatMessages = ({ chats }: ChatMessagesProps) => {
           alignSelf={chat.sender.self ? "flex-end" : "flex-start"}
         >
           {!chat.sender.self && (
-            <Image
-              borderRadius="full"
-              boxSize="40px"
-              src={chat.sender.image}
-              alt="Sender Image"
-              alignSelf="flex-start"
-            />
+            <Box position="relative" width="40px" height="40px"> 
+              <Image
+                borderRadius="full"
+                boxSize="40px"
+                src={chat.sender.image}
+                alt="Sender Image"
+                alignSelf="flex-start"
+                objectFit="cover"
+              />
+              <Image
+                position="absolute"
+                boxSize="14px"
+                bottom="0"
+                right="0"
+                src="/verified.svg"
+                borderRadius="full"
+              />
+            </Box>
           )}
           <VStack
             align="start"
@@ -35,7 +47,8 @@ const ChatMessages = ({ chats }: ChatMessagesProps) => {
             padding={4}
             color={chat.sender.self ? "#FFFFFF" : "#606060"}
             borderRadius="12px 12px 12px 0px"
-          >
+            maxWidth={chat.sender.self ? "100%" : "calc(100% - 50px)"}
+            >
             <div
               contentEditable="true"
               dangerouslySetInnerHTML={{ __html: chat.message }}
